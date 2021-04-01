@@ -44,7 +44,10 @@ public class LogAspect {
         String userName = "";
         String params = "";
         try {
-
+            /*ch.qos.logback.classic.Logger.threadLocalNo.set(logNo);
+            ch.qos.logback.classic.Logger.threadLocalTime.set(start);
+            ch.qos.logback.classic.Logger.inheritableThreadLocalNo.set(logNo);
+            ch.qos.logback.classic.Logger.inheritableThreadLocalTime.set(start);*/
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
             Object[] args = point.getArgs();
@@ -106,7 +109,10 @@ public class LogAspect {
                         "   ", "result=", JSON.toJSONString(result)
                 ));
             }
-
+           /* ch.qos.logback.classic.Logger.threadLocalNo.remove();
+            ch.qos.logback.classic.Logger.threadLocalTime.remove();
+            ch.qos.logback.classic.Logger.inheritableThreadLocalNo.remove();
+            ch.qos.logback.classic.Logger.inheritableThreadLocalTime.remove();*/
         }
         return result;
     }
