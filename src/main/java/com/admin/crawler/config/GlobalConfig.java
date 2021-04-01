@@ -7,11 +7,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class GlobalConfig {
-
+/*
     @Bean
     public DataScopeInterceptor dataScopeInterceptor() {
         return new DataScopeInterceptor();
-    }
+    }*/
 
     @Bean
     public ResolverBeanPostProcessor resolverBeanPostProcessor() {

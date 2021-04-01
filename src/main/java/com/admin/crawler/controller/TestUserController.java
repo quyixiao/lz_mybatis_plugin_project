@@ -6,6 +6,7 @@ import com.admin.crawler.entity.UserInfo;
 import com.admin.crawler.mapper.TestUserMapper;
 import com.alibaba.fastjson.JSON;
 import com.lz.mybatis.plugin.entity.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@Slf4j
 public class TestUserController {
 
     @Autowired
@@ -238,8 +240,9 @@ public class TestUserController {
     @RequestMapping("/selectPage")
     public String selectPage(int currPage,int pageSize) {
         Page page = testUserMapper.selectPage("张三","184xxxx", currPage, pageSize);
-        System.out.println(JSON.toJSONString(page));
-        return JSON.toJSONString(page);
+        String res =  JSON.toJSONString(page);
+        //log.info("currentPage :" + currPage + ", pageSize : " + pageSize + " res " + res);
+        return res;
     }
 
 }
