@@ -24,16 +24,18 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class LogAspect {
     private Logger logger = LoggerFactory.getLogger(getClass());
-
+    public static final ThreadLocal<String> threadLocalNo = new ThreadLocal();
+    public static final ThreadLocal<Long> threadLocalTime = new ThreadLocal();
     @Pointcut(value = "execution(* com..controller..*.*(..))")
     public void pointCut() {
     }
-
 
     @Around("pointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         String logNo = OrderUtil.getUserPoolOrder("tr");
         long start = System.currentTimeMillis();
+        threadLocalNo.set(logNo);
+        threadLocalTime.set(start);
         Object result = null;
         String uri = "";
         StringBuilder cm = new StringBuilder();
@@ -44,10 +46,6 @@ public class LogAspect {
         String userName = "";
         String params = "";
         try {
-            /*ch.qos.logback.classic.Logger.threadLocalNo.set(logNo);
-            ch.qos.logback.classic.Logger.threadLocalTime.set(start);
-            ch.qos.logback.classic.Logger.inheritableThreadLocalNo.set(logNo);
-            ch.qos.logback.classic.Logger.inheritableThreadLocalTime.set(start);*/
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
             Object[] args = point.getArgs();
@@ -70,7 +68,6 @@ public class LogAspect {
                     }
                 }
             }
-
             m = request.getMethod();
             uri = request.getRequestURI();
             ip = ServletUtils.getIpAddress(request);
@@ -90,29 +87,17 @@ public class LogAspect {
             result = R.error(e.getMessage());
             logger.error("controller error.", e);
         } finally {
-            if (cm.toString().toLowerCase().contains("captcha")) {
-                logger.info(StringUtil.appendStrs(
-                        "	", "cm=", cm.toString(),
-                        "	", "m=", m,
-                        "	", "uri=", uri,
-                        "	", "userName=", userName,
-                        "	", "ip=", ip
-                ));
-            } else {
-                logger.info(StringUtil.appendStrs(
-                        "	", "cm=", cm.toString(),
-                        "	", "m=", m,
-                        "	", "uri=", uri,
-                        "	", "userName=", userName,
-                        "	", "ip=", ip,
-                        "   ", "params=", params,
-                        "   ", "result=", JSON.toJSONString(result)
-                ));
-            }
-           /* ch.qos.logback.classic.Logger.threadLocalNo.remove();
-            ch.qos.logback.classic.Logger.threadLocalTime.remove();
-            ch.qos.logback.classic.Logger.inheritableThreadLocalNo.remove();
-            ch.qos.logback.classic.Logger.inheritableThreadLocalTime.remove();*/
+            logger.info(StringUtil.appendStrs(
+                    "	", "cm=", cm.toString(),
+                    "	", "m=", m,
+                    "	", "uri=", uri,
+                    "	", "userName=", userName,
+                    "	", "ip=", ip,
+                    "   ", "params=", params,
+                    "   ", "result=", JSON.toJSONString(result)
+            ));
+            threadLocalNo.remove();
+            threadLocalTime.remove();
         }
         return result;
     }

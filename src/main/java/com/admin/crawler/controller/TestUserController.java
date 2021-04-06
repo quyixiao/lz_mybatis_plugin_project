@@ -58,11 +58,10 @@ public class TestUserController {
 
     @RequestMapping("/selectUserBy")
     public String selectUserBy() {
-        List<TestUser> testUser = testUserMapper.selectUserBy("张三", "184","desc");
+        List<TestUser> testUser = testUserMapper.selectUserBy("张三", "184", "desc");
         System.out.println(testUser);
         return "测试成功";
     }
-
 
 
     @RequestMapping("/selectByTaskId")
@@ -238,10 +237,11 @@ public class TestUserController {
 
 
     @RequestMapping("/selectPage")
-    public String selectPage(int currPage,int pageSize) {
-        Page page = testUserMapper.selectPage("张三","184xxxx", currPage, pageSize);
-        String res =  JSON.toJSONString(page);
-        //log.info("currentPage :" + currPage + ", pageSize : " + pageSize + " res " + res);
+    public String selectPage(int currPage, int pageSize) {
+        log.info("   selectPage 方法开始 " + currPage + " pageSize :" + pageSize);
+        Page page = testUserMapper.selectPage("张三", "184xxxx", currPage, pageSize);
+        String res = JSON.toJSONString(page);
+        log.info("   selectPage 方法执行成功");
         return res;
     }
 

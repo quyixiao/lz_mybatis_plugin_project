@@ -39,10 +39,6 @@ mybatis:
 
 #showSql
 logging:
-  level:
-    com:
-      example:
-        mapper : debug
-
+  config: classpath:logback-${spring.profiles.active}.xml
 
 
