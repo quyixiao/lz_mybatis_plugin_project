@@ -8,11 +8,13 @@ import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.util.StringUtils;
 
 
 @SpringBootApplication
 @MapperScan(value = "com.admin.crawler.mapper"/*, factoryBean = CustomerMapperFactoryBean.class*/)
+@EnableAsync
 public class MyBatisApplication {
 
     public static void main(String[] args) {

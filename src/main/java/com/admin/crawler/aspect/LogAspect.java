@@ -5,6 +5,7 @@ import com.admin.crawler.utils.R;
 import com.admin.crawler.utils.ServletUtils;
 import com.admin.crawler.utils.StringUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.ttl.TransmittableThreadLocal;
 import org.apache.catalina.connector.ResponseFacade;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -24,8 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class LogAspect {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    public static final ThreadLocal<String> threadLocalNo = new ThreadLocal();
-    public static final ThreadLocal<Long> threadLocalTime = new ThreadLocal();
+    public static final TransmittableThreadLocal<String> threadLocalNo = new TransmittableThreadLocal();
+    public static final TransmittableThreadLocal<Long> threadLocalTime = new TransmittableThreadLocal();
     @Pointcut(value = "execution(* com..controller..*.*(..))")
     public void pointCut() {
     }

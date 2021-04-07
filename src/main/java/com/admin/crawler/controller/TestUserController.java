@@ -4,6 +4,7 @@ package com.admin.crawler.controller;
 import com.admin.crawler.entity.TestUser;
 import com.admin.crawler.entity.UserInfo;
 import com.admin.crawler.mapper.TestUserMapper;
+import com.admin.crawler.service.TestUserService;
 import com.alibaba.fastjson.JSON;
 import com.lz.mybatis.plugin.entity.Page;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,10 @@ public class TestUserController {
 
     @Autowired
     private TestUserMapper testUserMapper;
+
+
+    @Autowired
+    private TestUserService testUserService;
 
     @RequestMapping("/selectTestUserById")
     public String test() {
@@ -245,4 +250,12 @@ public class TestUserController {
         return res;
     }
 
+
+    @RequestMapping("/testAsync")
+    public String testAsync() {
+        for (int i = 0; i < 5; i++) {
+            testUserService.testAsync(i);
+        }
+        return "success";
+    }
 }
