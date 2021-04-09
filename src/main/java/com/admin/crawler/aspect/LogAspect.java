@@ -1,9 +1,6 @@
 package com.admin.crawler.aspect;
 
-import com.admin.crawler.utils.OrderUtil;
-import com.admin.crawler.utils.R;
-import com.admin.crawler.utils.ServletUtils;
-import com.admin.crawler.utils.StringUtil;
+import com.admin.crawler.utils.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import org.apache.catalina.connector.ResponseFacade;
@@ -25,8 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class LogAspect {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    public static final TransmittableThreadLocal<String> threadLocalNo = new TransmittableThreadLocal();
-    public static final TransmittableThreadLocal<Long> threadLocalTime = new TransmittableThreadLocal();
+    public static final ThreadLocal<String> threadLocalNo = new ThreadLocal();
+    public static final ThreadLocal<Long> threadLocalTime = new ThreadLocal();
+
     @Pointcut(value = "execution(* com..controller..*.*(..))")
     public void pointCut() {
     }
@@ -35,8 +33,8 @@ public class LogAspect {
     public Object around(ProceedingJoinPoint point) throws Throwable {
         String logNo = OrderUtil.getUserPoolOrder("tr");
         long start = System.currentTimeMillis();
-        threadLocalNo.set(logNo);
-        threadLocalTime.set(start);
+        ch.qos.logback.classic.Logger.inheritableThreadLocalNo.set(logNo);
+        ch.qos.logback.classic.Logger.inheritableThreadLocalTime.set(start);
         Object result = null;
         String uri = "";
         StringBuilder cm = new StringBuilder();
@@ -87,6 +85,7 @@ public class LogAspect {
         } catch (Exception e) {
             result = R.error(e.getMessage());
             logger.error("controller error.", e);
+            PDingDingUtils.sendText("异常 " +  ch.qos.logback.classic.Logger.inheritableThreadLocalNo.get() + "\n"+ ExceptionUtils.dealException(e));
         } finally {
             logger.info(StringUtil.appendStrs(
                     "	", "cm=", cm.toString(),
@@ -97,8 +96,8 @@ public class LogAspect {
                     "   ", "params=", params,
                     "   ", "result=", JSON.toJSONString(result)
             ));
-            threadLocalNo.remove();
-            threadLocalTime.remove();
+            ch.qos.logback.classic.Logger.inheritableThreadLocalNo.remove();
+            ch.qos.logback.classic.Logger.inheritableThreadLocalTime.remove();
         }
         return result;
     }

@@ -258,4 +258,14 @@ public class TestUserController {
         }
         return "success";
     }
+
+
+
+    @RequestMapping("/testException")
+    public String testException() {
+        int i = 0 ;
+        int j = 0 ;
+        int c = i / j;
+        return "success";
+    }
 }
