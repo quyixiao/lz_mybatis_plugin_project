@@ -268,4 +268,32 @@ public class TestUserController {
         int c = i / j;
         return "success";
     }
+
+
+
+
+
+    @RequestMapping("/testBatchUpdate")
+    public String testBatchUpdate() {
+        String a = "update lz_test_user set real_name = 'zhangsan' where id = 14;" +
+                "        update lz_test_user set real_name = 'zhangsan' where id = 15;";
+
+        testUserMapper.testBatchUpdate(a);
+
+        return "success";
+    }
+
+
+
+
+    @RequestMapping("/testBatchUpdatexx")
+    public String testBatchUpdatexx() {
+        TestUser testUser1 = testUserMapper.selectTestUserById(14l);
+        TestUser testUser2 = testUserMapper.selectTestUserById(14l);
+        List<TestUser> list = new ArrayList<>();
+        list.add(testUser1);
+        list.add(testUser2);
+        testUserMapper.testBatchUpdatexx(list);
+        return "success";
+    }
 }

@@ -87,4 +87,8 @@ public interface TestUserMapper extends MyBaseMapper<TestUser> {
     void deleteBatch();
 
     List<TestUser> selectByUserNameMobile1(String username, String mobile);
+
+    void testBatchUpdate(@Param("sql") String sql);
+
+    void testBatchUpdatexx(List<TestUser> testUsers);
 }

@@ -3,6 +3,19 @@
 <mapper namespace="com.admin.crawler.mapper.TestUserMapper">
 
 
+    <update id="testBatchUpdate">
+       ${sql}
+    </update>
+
+    <update id="testBatchUpdatexx">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update lz_test_user
+            <set>
+                real_name=#{item.realName}
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
 
 
 </mapper>
