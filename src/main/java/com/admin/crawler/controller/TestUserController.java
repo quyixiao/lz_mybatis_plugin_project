@@ -3,9 +3,11 @@ package com.admin.crawler.controller;
 
 import com.admin.crawler.entity.TestUser;
 import com.admin.crawler.entity.UserInfo;
+import com.admin.crawler.executor.MyRunnable;
 import com.admin.crawler.mapper.TestUserMapper;
 import com.admin.crawler.service.TestUserService;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.ttl.threadpool.TtlExecutors;
 import com.lz.mybatis.plugin.entity.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RestController
 @Slf4j
@@ -21,6 +25,12 @@ public class TestUserController {
 
     @Autowired
     private TestUserMapper testUserMapper;
+
+
+
+    private static ExecutorService pool = Executors.newFixedThreadPool(1);
+
+
 
 
     @Autowired
@@ -283,9 +293,6 @@ public class TestUserController {
         return "success";
     }
 
-
-
-
     @RequestMapping("/testBatchUpdatexx")
     public String testBatchUpdatexx() {
         TestUser testUser1 = testUserMapper.selectTestUserById(14l);
@@ -295,5 +302,45 @@ public class TestUserController {
         list.add(testUser2);
         testUserMapper.testBatchUpdatexx(list);
         return "success";
+    }
+
+    @RequestMapping(value = "getConsumer")
+    public String getConsumer() {
+        log.info("主线程中测试 ：" );
+        for (int i = 0; i < 5; i++) {
+            testUserService.testAsync(i);
+        }
+        log.info("子线程测试");
+        for(int i = 0 ;i < 5;i ++){
+            startThread(i);
+        }
+        log.info("线程池测试");
+        for (int i = 5; i < 11; i++) {
+            TtlExecutors.getTtlExecutorService(pool).submit(MyRunnable.get(new MyRunnableA(i)));
+        }
+
+        return "xxxxx";
+    }
+
+    public static void startThread(final int i) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                log.info("i = " + i + "   使用 主线程的线程编号 测试 ");
+            }
+        }).start();
+    }
+
+    static class MyRunnableA implements Runnable {
+        private int i;
+
+        public MyRunnableA(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public void run() {
+            log.info("i = " + i + "  MycallableA-> 子线程中拿到线程编号 ");
+        }
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.*;
 
-public class MyThreadPoolTaskExecutor extends ThreadPoolTaskExecutor {
+public class MyThreadPoolTaskExecutor_back extends ThreadPoolTaskExecutor {
 
     @Override
     protected ExecutorService initializeExecutor(
@@ -27,11 +27,14 @@ public class MyThreadPoolTaskExecutor extends ThreadPoolTaskExecutor {
         }
     }
 
+
+
+
     @Override
     public <T> Future<T> submit(Callable<T> task) {
         ExecutorService executor = getThreadPoolExecutor();
         try {
-            return executor.submit(TtlCallable.get(MyCallable.get(task)));
+            return executor.submit(TtlCallable.get(task));
         } catch (RejectedExecutionException ex) {
             throw new TaskRejectedException("Executor [" + executor + "] did not accept task: " + task, ex);
         }

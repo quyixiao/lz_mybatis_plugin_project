@@ -2,7 +2,6 @@ package com.admin.crawler.aspect;
 
 import com.admin.crawler.utils.*;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.ttl.TransmittableThreadLocal;
 import org.apache.catalina.connector.ResponseFacade;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -18,28 +17,23 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Aspect
-@Component
-public class LogAspect {
+//@Aspect
+//@Component
+public class LogAspect_back {
     private Logger logger = LoggerFactory.getLogger(getClass());
-
     public static final ThreadLocal<String> threadLocalNo = new ThreadLocal();
-    public static final ThreadLocal<String> myThreadLocalNo = new ThreadLocal();
     public static final ThreadLocal<Long> threadLocalTime = new ThreadLocal();
-    public static final TransmittableThreadLocal<Long> inheritableThreadLocalTime = new TransmittableThreadLocal();
-    public static final TransmittableThreadLocal<String> inheritableThreadLocalNo = new TransmittableThreadLocal();
 
-    @Pointcut(value = "execution(* com..controller..*.*(..))")
+  //  @Pointcut(value = "execution(* com..controller..*.*(..))")
     public void pointCut() {
     }
 
-    @Around("pointCut()")
+    //@Around("pointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         String logNo = OrderUtil.getUserPoolOrder("tr");
         long start = System.currentTimeMillis();
-        threadLocalNo.set(logNo);
-        inheritableThreadLocalNo.set(logNo);
-        inheritableThreadLocalTime.set(start);
+        ch.qos.logback.classic.Logger.inheritableThreadLocalNo.set(logNo);
+        ch.qos.logback.classic.Logger.inheritableThreadLocalTime.set(start);
         Object result = null;
         String uri = "";
         StringBuilder cm = new StringBuilder();
@@ -101,9 +95,8 @@ public class LogAspect {
                     "   ", "params=", params,
                     "   ", "result=", JSON.toJSONString(result)
             ));
-            threadLocalNo.remove();
-            inheritableThreadLocalNo.remove();
-            inheritableThreadLocalTime.remove();
+            ch.qos.logback.classic.Logger.inheritableThreadLocalNo.remove();
+            ch.qos.logback.classic.Logger.inheritableThreadLocalTime.remove();
         }
         return result;
     }
