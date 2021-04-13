@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,7 +29,7 @@ public class TestUserController {
 
 
 
-    private static ExecutorService pool = Executors.newFixedThreadPool(1);
+    private static ExecutorService pool = Executors.newFixedThreadPool(4);
 
 
 
@@ -316,9 +317,8 @@ public class TestUserController {
         }
         log.info("线程池测试");
         for (int i = 5; i < 11; i++) {
-            TtlExecutors.getTtlExecutorService(pool).submit(MyRunnable.get(new MyRunnableA(i)));
+            startThreadPoll(i);
         }
-
         return "xxxxx";
     }
 
@@ -326,7 +326,26 @@ public class TestUserController {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                log.info("i = " + i + "   使用 主线程的线程编号 测试 ");
+                log.info("i = " + i + "    子线程日志1 ");
+                log.info("i = " + i + "    子线程日志2 ");
+                Random random = new Random();
+                int sleep = random.nextInt(1000);
+                try {
+                    Thread.sleep(sleep);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                log.info("i = " + i + "    子线程日志3");
+                log.info("i = " + i + "    子线程日志4 ");
+            }
+        }).start();
+    }
+
+    public static void startThreadPoll(final int i) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                TtlExecutors.getTtlExecutorService(pool).submit(MyRunnable.get(new MyRunnableA(i)));
             }
         }).start();
     }
@@ -340,7 +359,17 @@ public class TestUserController {
 
         @Override
         public void run() {
-            log.info("i = " + i + "  MycallableA-> 子线程中拿到线程编号 ");
+            log.info("i = " + i + "  MyRunnableA-> 线程池中日志1 ");
+            log.info("i = " + i + "  MyRunnableA-> 线程池中日志2 ");
+            Random random = new Random();
+            int sleep = random.nextInt(1000);
+            try {
+                Thread.sleep(sleep);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            log.info("i = " + i + "  MyRunnableA-> 线程池中日志3 ");
+            log.info("i = " + i + "  MyRunnableA-> 线程池中日志4 ");
         }
     }
 }

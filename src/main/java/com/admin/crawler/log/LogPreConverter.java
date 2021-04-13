@@ -19,8 +19,6 @@ public class LogPreConverter extends ClassicConverter {
                     LogAspect.myThreadLocalNo.set(OrderUtil.getUserPoolOrder("cr"));
                 }
                 threadNo = LogAspect.myThreadLocalNo.get();
-            } else {
-                LogAspect.myThreadLocalNo.remove();
             }
             sb.append("[").append(LogAspect.inheritableThreadLocalNo.get()).append(",").append(threadNo).append("]").append("\t");
             Long start = LogAspect.inheritableThreadLocalTime.get();

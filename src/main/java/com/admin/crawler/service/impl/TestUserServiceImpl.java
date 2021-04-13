@@ -28,6 +28,8 @@ public class TestUserServiceImpl implements TestUserService {
     @Override
     @Async("asyncTaskExecutor")
     public void testAsync( int i ) {
+        log.info("i  = " + i  + " , Async日志1 " );
+        log.info("i  = " + i  + " , Async日志2 " );
         Random random = new Random();
         int sleep = random.nextInt(1000);
         try {
@@ -35,7 +37,7 @@ public class TestUserServiceImpl implements TestUserService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        log.info("i  = " + i  + " , sleep " + sleep);
+        log.info("i  = " + i  + " , Async日志3 " + sleep);
     }
 
 
