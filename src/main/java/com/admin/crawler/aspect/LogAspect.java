@@ -52,7 +52,7 @@ public class LogAspect {
      *         }).start();
      *     }
      */
-    private int i;                              //这样设置变量是有问题的，会存在并发问题
+    private int i;                              //【这样设置变量是有问题的，会存在并发问题】
 
     @Pointcut(value = "execution(* com..controller..*.*(..))")
     public void pointCut() {
