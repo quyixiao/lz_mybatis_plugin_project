@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 @Aspect
 @Component
@@ -77,7 +79,7 @@ public class LogAspect {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
             Object[] args = point.getArgs();
-
+            List<Object> argxx= new ArrayList<>();
             //过滤掉spring的一些http请求信息，下面的转jsonstring会抛异常
             if (args != null && args.length > 0) {
                 for (Object arg1 : args) {
@@ -92,7 +94,7 @@ public class LogAspect {
                     } else if (arg1 instanceof ResponseFacade) {
                         continue;
                     } else {
-                        arg = arg1;
+                        argxx.add(arg1);
                     }
                 }
             }
@@ -108,12 +110,12 @@ public class LogAspect {
                     cm.append(classMethods[classMethods.length - 2]).append(".").append(classMethods[classMethods.length - 1]);
                 }
             }
-            params = JSON.toJSONString(arg);
-            int b = Integer.parseInt(arg.toString());
-            i = b;
-            logger.info("执行前的i ============================ " + i);
+            params = JSON.toJSONString(argxx);
+            //int b = Integer.parseInt(arg.toString());
+            //i = b;
+            //logger.info("执行前的i ============================ " + i);
             result = point.proceed();
-            logger.info("执行后的i ++++++++++++++++++++++++++++++本来是 " +b +"，实际上是 " + i);
+            //logger.info("执行后的i ++++++++++++++++++++++++++++++本来是 " +b +"，实际上是 " + i);
             return result;
         } catch (Exception e) {
             result = R.error(e.getMessage());
