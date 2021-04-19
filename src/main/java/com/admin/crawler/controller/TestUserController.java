@@ -284,6 +284,15 @@ public class TestUserController {
 
 
 
+
+    @RequestMapping("/testThreadTest")
+    public String testThreadTest(int i) {
+        log.info(i + "");
+        return "success";
+    }
+
+
+
     @RequestMapping("/testBatchUpdate")
     public String testBatchUpdate() {
         String a = "update lz_test_user set real_name = 'zhangsan' where id = 14;" +

@@ -29,6 +29,29 @@ public class LogAspect {
     public static final TransmittableThreadLocal<Long> inheritableThreadLocalTime = new TransmittableThreadLocal();
     public static final TransmittableThreadLocal<String> inheritableThreadLocalNo = new TransmittableThreadLocal();
 
+    /***
+     *  public static void main(String[] args)throws Exception {
+     *
+     *         for (int i = 0; i < 10; i++) {
+     *             a(i);
+     *         }
+     *     }
+     *
+     *     public static void a(final int i ){
+     *         new Thread(new Runnable() {
+     *             @Override
+     *             public void run() {
+     *                 try {
+     *                     HttpUtils.get("http://localhost:8080/testThreadTest?i=" + i);
+     *                 } catch (IOException e) {
+     *                     e.printStackTrace();
+     *                 }
+     *             }
+     *         }).start();
+     *     }
+     */
+    private int i;                              //这样设置变量是有问题的，会存在并发问题
+
     @Pointcut(value = "execution(* com..controller..*.*(..))")
     public void pointCut() {
     }
@@ -49,6 +72,7 @@ public class LogAspect {
         String m = "";
         String userName = "";
         String params = "";
+
         try {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
@@ -85,7 +109,11 @@ public class LogAspect {
                 }
             }
             params = JSON.toJSONString(arg);
+            int b = Integer.parseInt(arg.toString());
+            i = b;
+            logger.info("执行前的i ============================ " + i);
             result = point.proceed();
+            logger.info("执行后的i ++++++++++++++++++++++++++++++本来是 " +b +"，实际上是 " + i);
             return result;
         } catch (Exception e) {
             result = R.error(e.getMessage());
