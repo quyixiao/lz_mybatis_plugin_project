@@ -5,12 +5,15 @@ import com.admin.crawler.entity.TestUser;
 import com.admin.crawler.entity.UserInfo;
 import com.admin.crawler.executor.MyRunnable;
 import com.admin.crawler.mapper.TestUserMapper;
+import com.admin.crawler.service.HelloRMIService;
 import com.admin.crawler.service.TestUserService;
+import com.admin.crawler.utils.SpringContextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.ttl.threadpool.TtlExecutors;
 import com.lz.mybatis.plugin.entity.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.remoting.rmi.RmiProxyFactoryBean;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +29,6 @@ public class TestUserController {
 
     @Autowired
     private TestUserMapper testUserMapper;
-
 
 
     private static ExecutorService pool = Executors.newFixedThreadPool(4);
@@ -381,4 +383,17 @@ public class TestUserController {
             log.info("i = " + i + "  MyRunnableA-> 线程池中日志4 ");
         }
     }
+
+
+
+
+    @RequestMapping("/rmiclient/test")
+    public String rmiclienttest() {
+        RmiProxyFactoryBean rmiProxyFactoryBean =   SpringContextUtils.getApplicationContext().getBean(RmiProxyFactoryBean.class);
+        HelloRMIService helloRMIService =(HelloRMIService)rmiProxyFactoryBean.getObject();
+        int c = helloRMIService.getAdd(1,2);
+        System.out.println(c);
+        return "success";
+    }
+
 }
