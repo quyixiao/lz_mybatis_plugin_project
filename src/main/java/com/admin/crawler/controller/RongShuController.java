@@ -3,19 +3,16 @@ package com.admin.crawler.controller;
 import com.admin.crawler.entity.UserBo;
 import com.admin.crawler.utils.R;
 import com.alibaba.fastjson.JSON;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rongshu")
 public class RongShuController {
 
     @RequestMapping("/enter")
-    public R enter(String username,String phone ) {
-        System.out.println("======username=======" + username);
-        System.out.println("phone===========" + phone);
+    public R enter(@RequestBody UserBo bo,String username) {
+        System.out.println("======username=======" + bo.getUsername());
+        System.out.println("phone===========" + bo.getPhone());
         //System.out.println(JSON.toJSONString(bo));
         return R.ok("kwkw ");
     }

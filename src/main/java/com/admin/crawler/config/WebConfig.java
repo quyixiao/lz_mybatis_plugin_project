@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.*;
 
 import java.util.List;
 
-@Configuration
+//@Configuration
 public class WebConfig implements WebMvcConfigurer {
     @Bean
     public RongShuWebInterceptor webInterceptor() {

@@ -208,7 +208,7 @@ public class RongShuTestxxxController {
             if (mappingLookupObj != null && urlLookupObj != null) {
                 Map<RequestMappingInfo, HandlerMethod> mappingLookup = (Map<RequestMappingInfo, HandlerMethod>) mappingLookupObj;
                 MultiValueMap<String, RequestMappingInfo> urlLookup = (MultiValueMap<String, RequestMappingInfo>) urlLookupObj;
-                List<RequestMappingInfo> requestMappingInfos = urlLookup.get("/do/enter");
+                List<RequestMappingInfo> requestMappingInfos = urlLookup.get("/rongshu/enter");
                 RequestMappingInfo requestMappingInfo = requestMappingInfos.get(0);
                 return mappingLookup.get(requestMappingInfo);
             }
