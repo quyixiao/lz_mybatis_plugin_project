@@ -1,5 +1,10 @@
 package com.test;
 
+import com.alibaba.fastjson.JSON;
+
+import java.util.Arrays;
+import java.util.List;
+
 public class Test {
 
 
@@ -15,5 +20,7 @@ public class Test {
 
     public static void main(String[] args) {
 
+        List<String> values = Arrays.asList("iodsi");
+        System.out.println(JSON.toJSONString(values));
     }
 }

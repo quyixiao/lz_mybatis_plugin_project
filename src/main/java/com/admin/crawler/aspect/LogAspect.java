@@ -120,7 +120,8 @@ public class LogAspect {
         } catch (Exception e) {
             result = R.error(e.getMessage());
             logger.error("controller error.", e);
-            PDingDingUtils.sendText("异常 " +  ch.qos.logback.classic.Logger.inheritableThreadLocalNo.get() + "\n"+ ExceptionUtils.dealException(e));
+            // 为了方便测试，先注释掉
+            // PDingDingUtils.sendText("异常 " +  ch.qos.logback.classic.Logger.inheritableThreadLocalNo.get() + "\n"+ ExceptionUtils.dealException(e));
         } finally {
             logger.info(StringUtil.appendStrs(
                     "	", "cm=", cm.toString(),
